@@ -27,14 +27,23 @@ metrics= [{'name': 'Vikke EC2 CPU Utilization',
             'statistics': 'Average',
             'unit': 'Percent'}]
 
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
 
-def lambda_handler(event, context):
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    raise TypeError ("Type %s not serializable" % type(obj))
+
+
+def status(event, context):
 
     pipelines_list = get_pipelines()
     alarms_list = get_alarms()
 
     #pipelines_list = [{'name': 'BrowserApiBuildPipeline', 'currentStatus': 'InProgress'}, {'name': 'BrowserConsumerBuildPipeline', 'currentStatus': 'InProgress'}, {'name': 'CocoBuildPipeline', 'currentStatus': 'InProgress'}, {'name': 'CocoInfraBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'DiaBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'HaliUIBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'LupaBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'RapsuUIBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'RegisterApiBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'RekkuBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'ReoApiBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'ReoInfraBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'ReoReportGeneratorBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'SokBrokerBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'SpectrumBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'SpectrumE2EBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'TaskuBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'TaskuInfraBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'VikkeBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'VikkeInfraBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'VikkeSalesforceIntegratorBuildPipeline', 'currentStatus': 'Succeeded'}]
     #print(pipelines_list)
+
+ 
 
     result = {
         "alarms_list" : alarms_list,
@@ -47,7 +56,8 @@ def lambda_handler(event, context):
         "metrics" : get_metrics()
     }
     
-    return {"body": result}
+    #return {"body": result}
+    return {"body": json.dumps(result, default=json_serial)}
 
 
 def has_alarms(d):
