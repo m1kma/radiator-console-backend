@@ -36,12 +36,13 @@ provider:
 functions:
   status:
     handler: handler.status
-
+    timeout: 30
+    memorySize: 256
     events:
       - http:
           path: status
           method: get
-          private: false
+          private: true
 plugins:
   - serverless-python-requirements
 
