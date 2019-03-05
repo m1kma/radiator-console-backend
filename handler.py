@@ -2,8 +2,6 @@ import boto3
 import json
 from datetime import date,datetime, timedelta
 
-#metrics= []
-
 metrics= [{'name': 'Vikke EC2 CPU Utilization',
             'request': {'Namespace':'AWS/EC2',
                         'MetricName':'CPUUtilization',
@@ -40,11 +38,6 @@ def status(event, context):
     pipelines_list = get_pipelines()
     alarms_list = get_alarms()
 
-    #pipelines_list = [{'name': 'BrowserApiBuildPipeline', 'currentStatus': 'InProgress'}, {'name': 'BrowserConsumerBuildPipeline', 'currentStatus': 'InProgress'}, {'name': 'CocoBuildPipeline', 'currentStatus': 'InProgress'}, {'name': 'CocoInfraBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'DiaBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'HaliUIBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'LupaBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'RapsuUIBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'RegisterApiBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'RekkuBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'ReoApiBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'ReoInfraBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'ReoReportGeneratorBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'SokBrokerBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'SpectrumBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'SpectrumE2EBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'TaskuBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'TaskuInfraBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'VikkeBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'VikkeInfraBuildPipeline', 'currentStatus': 'Succeeded'}, {'name': 'VikkeSalesforceIntegratorBuildPipeline', 'currentStatus': 'Succeeded'}]
-    #print(pipelines_list)
-
- 
-
     result = {
         "alarms_list" : alarms_list,
         "alarms_raised" : has_alarms(alarms_list),
@@ -55,8 +48,7 @@ def status(event, context):
         "pipelines_failed_list" : get_failed_pipe_list(pipelines_list),
         "metrics" : get_metrics()
     }
-    
-    #return {"body": result}
+
     return {"body": json.dumps(result, default=json_serial)}
 
 
