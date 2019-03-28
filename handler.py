@@ -52,8 +52,7 @@ def status(event, context):
         "pipelines_running" : is_pipe_running(pipelines_list),
         "pipelines_running_list" : get_running_pipe_list(pipelines_list),
         "pipelines_failed" : is_pipe_failed(pipelines_list),
-        "pipelines_failed_list" : get_failed_pipe_list(pipelines_list),
-        "metrics" : get_metrics()
+        "pipelines_failed_list" : get_failed_pipe_list(pipelines_list)
     }
     
     #return {"body": result}
