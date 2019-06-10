@@ -133,7 +133,7 @@ def list_alarms(d):
     alarm_list = []
     
     for item in d:
-        if item['StateValue'] != 'OK':
+        if item['StateValue'] != 'OK' and item['StateValue'] != 'INSUFFICIENT_DATA':
             alarm_list.append(item['AlarmName'])
 
     return alarm_list

@@ -45,7 +45,6 @@ functions:
           private: true
 plugins:
   - serverless-python-requirements
-
 package:
   exclude:
     - a/** # virtualenv
