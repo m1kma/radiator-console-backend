@@ -1,5 +1,7 @@
 import boto3
 import json
+import os
+from botocore.vendored import requests
 from datetime import date,datetime, timedelta
 
 metrics= [{'name': 'Vikke EC2 CPU Utilization',
@@ -38,6 +40,9 @@ def status(event, context):
     pipelines_list = get_pipelines()
     alarms_list = get_alarms()
 
+    if is_gitlab_api_tester_failed():
+        alarms_list.append('GitlabAPITester')
+
     result = {
         "alarms_list" : alarms_list,
         "alarms_raised" : has_alarms(alarms_list),
@@ -49,6 +54,20 @@ def status(event, context):
     }
 
     return {"body": json.dumps(result, default=json_serial)}
+
+
+def is_gitlab_api_tester_failed():
+    gitlab_token = os.environ["gitlabToken"]
+    headers = {'PRIVATE-TOKEN': gitlab_token}
+    response = requests.get("https://gitlab.sok.fi/api/v4/projects/1150/pipelines", headers=headers)
+    
+    gitlab_pipeline_json = response.json()
+    statusval = gitlab_pipeline_json[0]['status']
+    
+    if statusval == "failed":
+        return True
+    else:
+        return False
 
 
 def has_alarms(d):

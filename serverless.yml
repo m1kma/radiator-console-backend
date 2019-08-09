@@ -38,6 +38,8 @@ functions:
     handler: handler.status
     timeout: 30
     memorySize: 256
+    environment:
+      gitlabToken: nrYiHY5xaPUjh3o7pM7z
     events:
       - http:
           path: status
